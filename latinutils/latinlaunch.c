@@ -20,7 +20,7 @@ void usage()
 	fprintf(stderr, "Usage: latinlaunch [-n/--numvoc N] [-f/--vocfile FILENAME] command\n\
 	command: command to be executed after asking the words\n\
 	N: Number of vocabularies to ask (default: 5)\n\
-	FILENAME: file where latin vocabulary csv file is stored (default: ~/.local/share/latinvoc.csv\n");
+	FILENAME: file where latin vocabulary tab separated value file is stored (default: ~/.local/share/latinvoc.csv\n");
 	exit(1);
 }
 
@@ -28,14 +28,9 @@ int main(int argc, char *argv[])
 {
 	char opt;
 	int option_index = 0;
-
-	short numvoc = DEFAULT_NUM_VOC;
+	int numvoc = DEFAULT_NUM_VOC;
 	char *command;
 	char *vocfile = DEFAULT_VOC_FILE;
-
-	// detect if command is given
-	if (argc < 2)
-		usage();	
 
 	while (1) {
 		static struct option long_options[] =
@@ -61,12 +56,18 @@ int main(int argc, char *argv[])
 			default:
 				// handle unrecognized options
 				usage();
-				break; // not really necessary because usage will exit anyway
 		}
 	}
 	argc -= optind;
 	argv += optind;
-	command = argv[argc - 1];
+
+	// detect if command is given
+	if (argc < 1)
+		usage();
+
+	command = argv[0];
 
 	printf("Asking '%i' latin words from file '%s' before executing '%s'\n", numvoc, vocfile, command);
+	//execl("/usr/bin/urxvt", "/usr/bin/urxvt", "-e", command, NULL);
+	execl(command, NULL);
 }
