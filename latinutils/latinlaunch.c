@@ -1,3 +1,11 @@
+/*
+ * latinlaunch [-n/--numvoc N] [-f/--vocfile FILENAME] command
+ *
+ * Execute a command (often used for starting a graphical application)
+ * but ask the user to go throug N random latin words
+ * from the voc file FILENAME before command is executed.
+ */
+
 #include <stdio.h>  // printf
 #include <stdlib.h> // exit, getenv
 #include <unistd.h> // getopt_long
