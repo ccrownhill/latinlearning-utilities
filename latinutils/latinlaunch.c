@@ -72,5 +72,7 @@ int main(int argc, char *argv[])
 
 	printf("Asking '%i' latin words from file '%s' before executing '%s'\n", numvoc, vocfile, command);
 	//execl("/usr/bin/urxvt", "/usr/bin/urxvt", "-e", command, NULL);
-	execl(command, command, NULL);
+	
+	// this is just the exec call used by system as well but without forking
+	execl("/bin/sh", "sh", "-c", command, (char *) NULL);
 }
