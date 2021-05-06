@@ -69,5 +69,5 @@ int main(int argc, char *argv[])
 
 	printf("Asking '%i' latin words from file '%s' before executing '%s'\n", numvoc, vocfile, command);
 	//execl("/usr/bin/urxvt", "/usr/bin/urxvt", "-e", command, NULL);
-	execl(command, NULL);
+	execl(command, command, NULL);
 }
