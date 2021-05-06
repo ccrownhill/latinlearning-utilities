@@ -13,7 +13,7 @@
 #include <string.h> // strcat
 
 #define DEFAULT_NUM_VOC 5
-#define DEFAULT_VOC_FILE strcat(getenv("HOME"), "/.local/share/latinvoc.csv")
+#define DEFAULT_VOC_FILE ".local/share/latinvoc.csv" // relative to current user home directory
 
 void usage()
 {
@@ -30,7 +30,9 @@ int main(int argc, char *argv[])
 	int option_index = 0;
 	int numvoc = DEFAULT_NUM_VOC;
 	char *command;
-	char *vocfile = DEFAULT_VOC_FILE;
+	char vocfile[255];
+
+	snprintf(vocfile, 255, "%s/%s", getenv("HOME"), DEFAULT_VOC_FILE);
 
 	while (1) {
 		static struct option long_options[] =
@@ -51,7 +53,8 @@ int main(int argc, char *argv[])
 				numvoc = atoi(optarg);
 				break;
 			case 'f':
-				vocfile = optarg;
+				strncpy(vocfile, optarg, 254);
+				vocfile[254] = '\0';
 				break;
 			default:
 				// handle unrecognized options
