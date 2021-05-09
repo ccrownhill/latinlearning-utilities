@@ -10,7 +10,7 @@ latinlaunch -n/--numvoc numvoc -f/--vocfile filename.csv command
 
 Latinlaunch uses `latinlearn.py` to execute any given command with also asking for a specified number of latin words before that program is opened.
 
-To automatically install so that when executing programs like `firefox` you are always being asked latin vocabulary use
+To automatically install so that when executing programs like `firefox` you are always being asked latin vocabulary use (this will add a new `firefox` executable shell script which will exec `latinlaunch` with the command `/usr/bin/firefox` specified in the `~/.local/bin` directory)
 
 ```
 $ sh latinlaunch_install.sh
