@@ -1,4 +1,4 @@
-# Latin utilities
+# Latin learning utilities
 
 Note that for vocabulary formats the code in this repo is specifically designed for exported Anki decks in text format with the fields being separated by tabs (That's also why in `latinlaunch.c` certain html elements are removed from the words since those usually appear in these `.txt` Anki decks).
 
