@@ -10,10 +10,12 @@
 #include <stdlib.h> // exit, getenv
 #include <unistd.h> // getopt_long
 #include <getopt.h> // getopt_long
-#include <string.h> // strcat
+#include <string.h> // strcat, strerror
+#include <errno.h> // errno
+#include <sys/wait.h> // waitpid
 
-#define DEFAULT_NUM_VOC 5
-#define DEFAULT_VOC_FILE ".local/share/latinvoc.csv" // relative to current user home directory
+#define DEFAULT_NUM_VOC "5" // this is a string because giving arguments via exec requires char pointers
+#define DEFAULT_VOC_FILE ".local/share/latinvoc.txt" // relative to current user home directory
 
 void usage()
 {
@@ -24,11 +26,17 @@ void usage()
 	exit(1);
 }
 
+void error(char *msg)
+{
+	fprintf(stderr, "%s: %s\n", msg, strerror(errno));
+	exit(1);
+}
+
 int main(int argc, char *argv[])
 {
 	char opt;
 	int option_index = 0;
-	int numvoc = DEFAULT_NUM_VOC;
+	char *numvoc = DEFAULT_NUM_VOC; // string because exec commands only accept strings
 	char *command;
 	char vocfile[255];
 
@@ -50,7 +58,7 @@ int main(int argc, char *argv[])
 		
 		switch (opt) {
 			case 'n':
-				numvoc = atoi(optarg);
+				numvoc = optarg;
 				break;
 			case 'f':
 				strncpy(vocfile, optarg, 254);
@@ -70,8 +78,17 @@ int main(int argc, char *argv[])
 
 	command = argv[0];
 
-	printf("Asking '%i' latin words from file '%s' before executing '%s'\n", numvoc, vocfile, command);
-	//execl("/usr/bin/urxvt", "/usr/bin/urxvt", "-e", command, NULL);
+	pid_t child_pid = fork();
+	if (child_pid == -1)
+		error("Can't fork process");
+
+	if (!child_pid)
+		if (execl("/usr/bin/urxvt", "urxvt", "-e", "latinlearn", "--numvoc", numvoc, vocfile, (char *) NULL) == -1)
+			error("Can't run latinlearn script");
+
+	int pid_status;
+	if (waitpid(child_pid, &pid_status, 0) == -1)
+		error("Error waiting for child process");
 	
 	// this is just the exec call used by system as well but without forking
 	execl("/bin/sh", "sh", "-c", command, (char *) NULL);

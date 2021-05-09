@@ -4,10 +4,9 @@
 latin_voc_learning -n num_vocs (default: 10) vocfilename
 
 Ask random num_vocs latin words from vocfilename (a file with fields separated by tabs)
-
 All words are in a queue data structure and wrongly answered ones go back to the beginning of the queue.
-
-One line can have up to 255 characters
+One line can have up to 255 characters.
+A correct answer means that only one correct meaning must have been given.
 '''
 
 import argparse
@@ -19,7 +18,6 @@ def main():
     parser.add_argument('-n', '--numvoc', required=True, type=int, help='number of vocabularies to go throug')
     parser.add_argument('vocfilename', type=str, help='tab separated vocabulary file to load random words from')
     args = parser.parse_args()
-    print("Asking '%i' random words from '%s'" % (args.numvoc, args.vocfilename))
 
     word_entry_dict_keys = ['word', 'extra', 'meaning']
     full_word_list = list()
@@ -37,7 +35,6 @@ def main():
             full_word_list.append({key: value for key, value in zip(word_entry_dict_keys, line)})
     voc_queue.extend(sample(full_word_list, args.numvoc))
 
-    print(voc_queue)
     # ask words until all words were answered correctly
     while voc_queue:
         word = voc_queue.popleft()
@@ -52,23 +49,11 @@ def main():
 
 def is_word_correct(meaning, answer):
     '''
-    using the Levenshtein distance between
-    answer and meaning and compare it with a threshold
-    to find out if the answer is close enought to the
-    real solution
+    Returns true if at least 1 meaning was correct
     '''
-    print(levenshtein_distance(meaning, answer)
-    return (meaning == answer)
-
-def levenshtein_distance(string1, string2):
-    '''
-    calculate Levenshtein distance between two strings
-    See https://en.wikipedia.org/wiki/Levenshtein%5Fdistance
-
-    The distance returned is a number which can be viewed
-    as the number of edits to convert string1 to string2
-    '''
-    return 0
+    meaning_set = set(meaning.split(', '))
+    answer_set = set(answer.split(', '))
+    return (meaning_set & answer_set)
 
 
 if __name__ == '__main__':
