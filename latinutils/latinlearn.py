@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 '''
-latin_voc_learning -n num_vocs (default: 10) vocfilename
+latinlearn.py -n num_vocs (default: 10) vocfilename
 
 Ask random num_vocs latin words from vocfilename (a file with fields separated by tabs)
 All words are in a queue data structure and wrongly answered ones go back to the beginning of the queue.
@@ -15,7 +15,7 @@ from random import sample
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-n', '--numvoc', required=True, type=int, help='number of vocabularies to go throug')
+    parser.add_argument('-n', '--numvoc', default=10, type=int, help='number of vocabularies to go throug')
     parser.add_argument('vocfilename', type=str, help='tab separated vocabulary file to load random words from')
     args = parser.parse_args()
 
