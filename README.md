@@ -8,7 +8,7 @@ Note that for vocabulary formats the code in this repo is specifically designed 
 latinlaunch [-n/--numvoc numvoc] [-f/--vocfile filename.txt] [-t/--terminal terminal_name] command
 ```
 
-Latinlaunch uses `latinlearn.py` to execute any given command with also asking for a specified number of latin words before that program is opened.
+Latinlaunch uses `latinlearn.py` (to ask the words this is run in the terminal `terminal_name` which is the full path to the terminal executable like `/usr/bin/urxvt`) to execute any given command with also asking for a specified number of latin words before that program is opened.
 
 To automatically install so that when executing programs like `firefox` you are always being asked latin vocabulary use (this will add a new `firefox` executable shell script which will exec `latinlaunch` with the command `/usr/bin/firefox` specified in the `~/.local/bin` directory)
 
