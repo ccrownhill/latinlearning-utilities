@@ -1,6 +1,7 @@
 #!/bin/sh
 DEFAULT_NUM_VOC=5
 DEFAULT_VOC_FILE="$HOME/.local/share/latinvoc.txt"
+DEFAULT_TERMINAL="/usr/bin/urxvt"
 declare -a LATINLAUNCH_APPLICATIONS
 LATINLAUNCH_APPLICATIONS=("/usr/bin/firefox" "/var/lib/flatpak/exports/bin/com.microsoft.Teams")
 
@@ -10,7 +11,7 @@ cp latinlaunch "$HOME/.local/bin"
 for app in ${LATINLAUNCH_APPLICATIONS[@]}; do
 	cat > "$HOME/.local/bin/$(basename $app)" <<- EOF
 	#!/bin/sh
-	exec "$HOME/.local/bin/latinlaunch" --numvoc $DEFAULT_NUM_VOC --vocfile $DEFAULT_VOC_FILE $app
+	exec "$HOME/.local/bin/latinlaunch" --numvoc $DEFAULT_NUM_VOC --vocfile $DEFAULT_VOC_FILE --terminal $DEFAULT_TERMINAL $app
 	EOF
 	chmod 755 "$HOME/.local/bin/$(basename $app)"
 done

@@ -5,7 +5,7 @@ Note that for vocabulary formats the code in this repo is specifically designed 
 ## latinlaunch
 
 ```
-latinlaunch -n/--numvoc numvoc -f/--vocfile filename.csv command
+latinlaunch [-n/--numvoc numvoc] [-f/--vocfile filename.txt] [-t/--terminal terminal_name] command
 ```
 
 Latinlaunch uses `latinlearn.py` to execute any given command with also asking for a specified number of latin words before that program is opened.
@@ -21,7 +21,7 @@ Note that you can configure `latinlaunch_install.sh` to tell it where the tab se
 ## latinlearn.py
 
 ```
-latinlearn.py -n num_vocs vocfilename
+latinlearn.py [-n/--numvoc num_vocs] vocfilename
 ```
 
 This program will ask for a specified number of latin words (their meanings) while choosing these words randomly from a tab separated vocabulary file.

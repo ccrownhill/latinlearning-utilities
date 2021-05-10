@@ -1,5 +1,5 @@
 /*
- * latinlaunch [-n/--numvoc N] [-f/--vocfile FILENAME] command
+ * latinlaunch [-n/--numvoc N (default: 5)] [-f/--vocfile FILENAME (default: ~/.local/share/latinvoc.txt)] [-t/--terminal TERM_NAME (default: /usr/bin/urxvt)] command
  *
  * Execute a command (often used for starting a graphical application)
  * but ask the user to go throug N random latin words
@@ -16,13 +16,15 @@
 
 #define DEFAULT_NUM_VOC "5" // this is a string because giving arguments via exec requires char pointers
 #define DEFAULT_VOC_FILE ".local/share/latinvoc.txt" // relative to current user home directory
+#define DEFAULT_TERM "/usr/bin/urxvt"
 
 void usage()
 {
-	fprintf(stderr, "Usage: latinlaunch [-n/--numvoc N] [-f/--vocfile FILENAME] command\n\
+	fprintf(stderr, "Usage: latinlaunch [-n/--numvoc N] [-f/--vocfile FILENAME] [-t/--terminal TERM_NAME] command\n\
 	command: command to be executed after asking the words\n\
 	N: Number of vocabularies to ask (default: 5)\n\
-	FILENAME: file where latin vocabulary tab separated value file is stored (default: ~/.local/share/latinvoc.csv\n");
+	FILENAME: file where latin vocabulary tab separated value file is stored (default: ~/.local/share/latinvoc.csv\n\
+	TERM_NAME: terminal in which latinlearn program is executed (default: /usr/bin/urxvt)");
 	exit(1);
 }
 
@@ -37,6 +39,7 @@ int main(int argc, char *argv[])
 	char opt;
 	int option_index = 0;
 	char *numvoc = DEFAULT_NUM_VOC; // string because exec commands only accept strings
+	char *term = DEFAULT_TERM;
 	char *command;
 	char vocfile[255];
 
@@ -47,10 +50,11 @@ int main(int argc, char *argv[])
 		{
 			{"numvoc", required_argument, 0, 'n'},
 			{"vocfile", required_argument, 0, 'f'},
+			{"terminal", required_argument, 0, 't'},
 			{0, 0, 0, 0},
 		};
 
-		opt = getopt_long(argc, argv, "n:f:", long_options, &option_index);
+		opt = getopt_long(argc, argv, "n:f:t:", long_options, &option_index);
 
 		// detect end of options
 		if (opt == -1)
@@ -63,6 +67,9 @@ int main(int argc, char *argv[])
 			case 'f':
 				strncpy(vocfile, optarg, 254);
 				vocfile[254] = '\0';
+				break;
+			case 't':
+				term = optarg;
 				break;
 			default:
 				// handle unrecognized options
@@ -83,7 +90,7 @@ int main(int argc, char *argv[])
 		error("Can't fork process");
 
 	if (!child_pid)
-		if (execl("/usr/bin/urxvt", "urxvt", "-e", "latinlearn", "--numvoc", numvoc, vocfile, (char *) NULL) == -1)
+		if (execl(term, term, "-e", "latinlearn", "--numvoc", numvoc, vocfile, (char *) NULL) == -1)
 			error("Can't run latinlearn script");
 
 	int pid_status;
